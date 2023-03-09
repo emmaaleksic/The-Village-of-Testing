@@ -9,7 +9,7 @@ class VillageTest {
 
     @BeforeEach
     void setUp() {
-        village = new Village();
+        village = new Village(new DatabaseConnection());
     }
 
     @Test
@@ -21,14 +21,14 @@ class VillageTest {
     @Test
     void testAddWorker() {
         for (int i = 0; i < 10; i++) {
-            village.addWorker("name", "job", () -> village.addFood());
+            village.addWorker("name", "food", () -> village.addFood());
         }
         assertEquals(6, village.getWorkers().size());
     }
 
     @Test
     void testAddWorkerDay() {
-        village.addWorker("name", "job", () -> village.addFood());
+        village.addWorker("name", "food", () -> village.addFood());
         village.day();
 
         assertEquals(14, village.getFood());
@@ -44,19 +44,19 @@ class VillageTest {
 
     @Test
     void testDayTwo() {
-        village.addWorker("name", "job", () -> village.addMetal());
-        village.addWorker("name", "job", () -> village.addWood());
-        village.addWorker("name", "job", () -> village.addFood());
+        village.addWorker("name", "metal", () -> village.addMetal());
+        village.addWorker("name", "wood", () -> village.addWood());
+        village.addWorker("name", "food", () -> village.addFood());
         village.day();
         village.day();
 
-        assertResources(2, 2, 14);
+        assertResources(4, 4, 14);
     }
 
     @Test
     void testDayThree() {
         village.setFood(0);
-        village.addWorker("name", "job", () -> village.addMetal());
+        village.addWorker("name", "metal", () -> village.addMetal());
         village.day();
 
         Worker worker = village.getWorkers().get(0);
@@ -69,9 +69,9 @@ class VillageTest {
 
     @Test
     void testAddProjectOne() {
-        village.addWorker("name", "job", () -> village.addWood());
-        village.addWorker("name", "job", () -> village.addFood());
-        village.addWorker("name", "job", () -> village.build());
+        village.addWorker("name", "wood", () -> village.addWood());
+        village.addWorker("name", "food", () -> village.addFood());
+        village.addWorker("name", "build", () -> village.build());
 
         for (int i = 0; i < 5; i++) {
             village.day();
@@ -104,28 +104,27 @@ class VillageTest {
 
     @Test
     void testWoodMill() {
-        village.addWorker("name", "job", () -> village.addWood());
-        village.addWorker("name", "job", () -> village.addMetal());
-        village.addWorker("name", "job", () -> village.addFood());
-        village.addWorker("name", "job", () -> village.build());
+        village.addWorker("name", "wood", () -> village.addWood());
+        village.addWorker("name", "metal", () -> village.addMetal());
+        village.addWorker("name", "food", () -> village.addFood());
+        village.addWorker("name", "build", () -> village.build());
 
         for (int i = 0; i < 5; i++) {
             village.day();
         }
 
-        assertResources(5, 5, 15);
+        assertResources(10, 10, 15);
 
         Woodmill woodmill = new Woodmill("Osby");
         village.addProject(woodmill);
 
-        assertEquals(0, village.getWood());
-        assertEquals(4, village.getMetal());
+        assertResources(5, 9, 15);
         assertEquals(1, village.getProjects().size());
 
         for (int i = 0; i < 6; i++) {
             village.day();
         }
-        assertResources(6, 10, 21);
+        assertResources(17, 21, 21);
         assertEquals(0, village.getProjects().size());
         assertEquals(4, village.getBuildings().size());
     }
@@ -133,7 +132,7 @@ class VillageTest {
     @Test
     void testHungryOne() {
         village.setFood(0);
-        village.addWorker("name", "job", () -> village.addWood());
+        village.addWorker("name", "wood", () -> village.addWood());
 
         for (int i = 0; i < 4; i++) {
             village.day();
@@ -145,7 +144,7 @@ class VillageTest {
     @Test
     void testHungryTwo() {
         village.setFood(0);
-        village.addWorker("name", "job", () -> village.addWood());
+        village.addWorker("name", "wood", () -> village.addWood());
 
         for (int i = 0; i < 42; i++) {
             village.day();
@@ -156,7 +155,7 @@ class VillageTest {
     @Test
     void testHungryThree() {
         village.setFood(0);
-        village.addWorker("name", "job", () -> village.addWood());
+        village.addWorker("name", "wood", () -> village.addWood());
 
         Worker worker = village.getWorkers().get(0);
 
@@ -174,7 +173,7 @@ class VillageTest {
     @Test
     void testHungryFour() {
         village.setFood(0);
-        village.addWorker("name", "job", () -> village.addWood());
+        village.addWorker("name", "wood", () -> village.addWood());
         Worker worker = village.getWorkers().get(0);
         worker.setAlive(false);
 
@@ -187,16 +186,16 @@ class VillageTest {
 
     @Test
     void testCastle() {
-        village.addWorker("name", "job", () -> village.addWood());
-        village.addWorker("name", "job", () -> village.addMetal());
-        village.addWorker("name", "job", () -> village.addFood());
-        village.addWorker("name", "job", () -> village.build());
+        village.addWorker("name", "wood", () -> village.addWood());
+        village.addWorker("name", "metal", () -> village.addMetal());
+        village.addWorker("name", "food", () -> village.addFood());
+        village.addWorker("name", "build", () -> village.build());
 
         for (int i = 0; i < 50; i++) {
             village.day();
         }
 
-        assertResources(50, 50, 60);
+        assertResources(100, 100, 60);
 
         Castle castle = new Castle("Slott");
         village.addProject(castle);
@@ -207,7 +206,7 @@ class VillageTest {
             village.day();
         }
 
-        assertResources(51, 51, 111);
+        assertResources(152, 152, 111);
         assertEquals(0, village.getProjects().size());
         assertEquals(4, village.getBuildings().size());
 

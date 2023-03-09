@@ -19,43 +19,43 @@ public class Quarry implements Building{
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public int getWoodCost() {
-        return 0;
+        return woodCost;
     }
 
     @Override
     public int getMetalCost() {
-        return 0;
+        return metalCost;
     }
 
     @Override
     public int getDaysWorkerOn() {
-        return 0;
+        return daysWorkerOn;
     }
 
     @Override
-    public void setDaysWorkerOn(int daysWorkerOn) {
+    public void setDaysWorkerOn(int daysWorkerOn) {this.daysWorkerOn = daysWorkerOn;
 
     }
 
     @Override
     public int getDaysToComplete() {
-        return 0;
+        return daysToComplete;
     }
 
     @Override
     public void removeOneDayToComplete() {
+        daysToComplete--;
 
     }
 
-
     @Override
     public boolean isComplete() {
-        return false;
+        return complete;
     }
 
     @Override
@@ -65,6 +65,8 @@ public class Quarry implements Building{
 
     @Override
     public boolean enoughResources(int wood, int metal) {
+        if(wood >= woodCost && metal >= metalCost){
+            return true;}
         return false;
     }
 

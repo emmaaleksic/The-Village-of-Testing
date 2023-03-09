@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Village {
 
@@ -14,7 +15,9 @@ public class Village {
     private List<Building> buildings;
     private List<Building> projects;
 
-    public Village() {
+    private DatabaseConnection databaseConnection;
+
+    public Village(DatabaseConnection databaseConnection) {
         this.food = 10;
         this.wood = 0;
         this.metal = 0;
@@ -25,6 +28,7 @@ public class Village {
         this.workers = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.projects = new ArrayList<>();
+        this.databaseConnection = databaseConnection;
 
         House house1 = new House("Hus 1");
         House house2 = new House("Hus 2");
@@ -72,15 +76,27 @@ public class Village {
     }
 
     public void addFood() {
-        food += 5;
+        long farmBuildings = buildings.stream()
+                .filter(building -> building instanceof Farm)
+                .count();
+        food += 5 + farmBuildings * 10;
+
     }
 
     public void addMetal() {
-        metal++;
+        long quarryBuildings = buildings.stream()
+                .filter(building -> building instanceof Quarry)
+                .count();
+        metal += 2 + quarryBuildings * 2;
+
     }
 
     public void addWood() {
-        wood++;
+        long woodMillBuildings = buildings.stream()
+                .filter(building -> building instanceof Woodmill)
+                .count();
+        wood += 2 + woodMillBuildings * 2;
+
     }
 
     public void build() {
@@ -119,6 +135,25 @@ public class Village {
         }
 
     }
+
+    public boolean castleisBuilt() {
+        Optional<Building> any = buildings.stream()
+                .filter(e -> e instanceof Castle)
+                .findAny();
+
+        return any.isPresent();
+    }
+
+    public void saveProgress() {
+        databaseConnection.save(this);
+    }
+
+    public Village loadProgress() {
+        Village loadedVillage = databaseConnection.load();
+        return loadedVillage;
+        /*food = databaseConnection.getFood();*/
+    }
+
 
     public int getFood() {
         return food;
