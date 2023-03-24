@@ -59,7 +59,7 @@ public class Castle implements Building{
     @Override
     public void setComplete(int daysGone) {
         complete=true;
-        System.out.println("The castle is complete! You won! You took " + daysGone + " days");
+        System.out.println("The castle is complete! You won! It took " + daysGone + " days to build the castle");
     }
 
     @Override

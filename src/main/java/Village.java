@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class Village {
+
 
     private int food;
     private int wood;
@@ -30,9 +32,9 @@ public class Village {
         this.projects = new ArrayList<>();
         this.databaseConnection = databaseConnection;
 
-        House house1 = new House("Hus 1");
-        House house2 = new House("Hus 2");
-        House house3 = new House("Hus 3");
+        House house1 = new House("House");
+        House house2 = new House("House");
+        House house3 = new House("House");
 
         house1.setComplete(daysGone);
         house2.setComplete(daysGone);
@@ -57,8 +59,26 @@ public class Village {
         }
     }
 
-    public void addProject(Building newBuilding) {
+    public WorkerDelegate addRandomWorker(Random random){
+        int randomNumber = random.nextInt(4);
+        switch (randomNumber){
+            case 0 -> {
+                return ()->addWood();
+            }
+            case 1 -> {
+                return  ()->addFood();
+            }
+            case 2 -> {
+                return  ()->addMetal();
+            }
+            case 3 -> {
+                return ()->addBuilder();
+            }
+        }
+        return null;
+    }
 
+    public void addProject(Building newBuilding) {
         if (newBuilding.enoughResources(wood, metal)) {
             projects.add(newBuilding);
             wood = wood - newBuilding.getWoodCost();
@@ -99,7 +119,7 @@ public class Village {
 
     }
 
-    public void build() {
+    public void addBuilder() {
         if (!projects.isEmpty()) {
             Building building = projects.get(0);
 
@@ -145,13 +165,14 @@ public class Village {
     }
 
     public void saveProgress() {
-        databaseConnection.save(this);
+        boolean save = databaseConnection.save(food);
+        System.out.println(save);
     }
 
-    public Village loadProgress() {
-        Village loadedVillage = databaseConnection.load();
-        return loadedVillage;
-        /*food = databaseConnection.getFood();*/
+    public void loadProgress() {
+        int loadedFood = databaseConnection.load();
+        System.out.println(loadedFood);
+        food = loadedFood;
     }
 
 

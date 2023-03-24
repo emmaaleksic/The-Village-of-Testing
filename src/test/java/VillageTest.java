@@ -71,7 +71,7 @@ class VillageTest {
     void testAddProjectOne() {
         village.addWorker("name", "wood", () -> village.addWood());
         village.addWorker("name", "food", () -> village.addFood());
-        village.addWorker("name", "build", () -> village.build());
+        village.addWorker("name", "build", () -> village.addBuilder());
 
         for (int i = 0; i < 5; i++) {
             village.day();
@@ -107,7 +107,7 @@ class VillageTest {
         village.addWorker("name", "wood", () -> village.addWood());
         village.addWorker("name", "metal", () -> village.addMetal());
         village.addWorker("name", "food", () -> village.addFood());
-        village.addWorker("name", "build", () -> village.build());
+        village.addWorker("name", "build", () -> village.addBuilder());
 
         for (int i = 0; i < 5; i++) {
             village.day();
@@ -189,7 +189,7 @@ class VillageTest {
         village.addWorker("name", "wood", () -> village.addWood());
         village.addWorker("name", "metal", () -> village.addMetal());
         village.addWorker("name", "food", () -> village.addFood());
-        village.addWorker("name", "build", () -> village.build());
+        village.addWorker("name", "build", () -> village.addBuilder());
 
         for (int i = 0; i < 50; i++) {
             village.day();

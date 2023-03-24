@@ -1,11 +1,11 @@
 public class DatabaseConnection {
 
-    public void save(Village village){
-        System.out.println("Saved to database");
+    public boolean save(int food) {
+        return false;
     }
-    public Village load(){
-        System.out.println("Load from database");
-        return new Village(this);
+
+    public int load() {
+        return 0;
     }
 
 
